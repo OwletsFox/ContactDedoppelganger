@@ -3,20 +3,28 @@ package com.example.contactdedoppelganger.data.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.content.ContentResolver
 import android.provider.ContactsContract
+import android.util.Log
 import com.example.contactdedoppelganger.IContactService
 import com.example.contactdedoppelganger.data.dto.ContactParcelable
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /** Реализация сервиса IContactService */
+@AndroidEntryPoint
 class ContactService : Service() {
+
+    /** Инъекция contentResolver */
+    @Inject
+    lateinit var resolver: ContentResolver
 
     private val binder = object : IContactService.Stub() {
         override fun getAllContacts(): MutableList<ContactParcelable> {
-            val contentResolver = applicationContext.contentResolver
             val result = mutableListOf<ContactParcelable>()
 
             /** Запрос курсора всех контактов (ID + DISPLAY_NAME) */
-            val cursor = contentResolver.query(
+            val cursor = resolver.query(
                 ContactsContract.Contacts.CONTENT_URI,
                 arrayOf(
                     ContactsContract.Contacts._ID,
@@ -35,7 +43,7 @@ class ContactService : Service() {
 
                     /** Запрос номеров каждого контакта */
                     val phones = mutableListOf<String>()
-                    val pCursor = contentResolver.query(
+                    val pCursor = resolver.query(
                         ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                         arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
                         "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
@@ -60,4 +68,3 @@ class ContactService : Service() {
 
     override fun onBind(intent: Intent): IBinder = binder
 }
-
