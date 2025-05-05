@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ContactDedoppelganger</string>
+
+    <!-- placehoders -->
+    <string name="item_contact_placeholder_name">name</string>
+    <string name="item_contact_placeholder_phone">phone</string>
+    <string name="btn_del_duplicates_text">Delete doppelgangers</string>
 </resources>
