@@ -6,4 +6,7 @@ import java.util.List;
 interface IContactService {
     /** Возвращает список всех контактов */
     List<ContactParcelable> getAllContacts();
+
+    /** Удаляет полные дубли контактов */
+    int removeDuplicateContacts();
 }
