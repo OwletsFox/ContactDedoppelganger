@@ -3,12 +3,14 @@ package com.example.contactdedoppelganger.ui.activity
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.contactdedoppelganger.R
 import com.example.contactdedoppelganger.databinding.ActivityMainBinding
 import com.example.contactdedoppelganger.ui.adapter.ContactAdapter
 import com.example.contactdedoppelganger.ui.viewmodel.MainViewModel
@@ -53,6 +55,20 @@ class MainActivity : AppCompatActivity() {
         viewModel.error.observe(this) { msg ->
             msg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModel.removedCount.observe(this) { count ->
+            count?.let {
+                val message = when {
+                    it > 0 -> getString(R.string.deleted_duplicates, it)
+                    it == 0 -> getString(R.string.no_duplicates_found)
+                    else -> {
+                        /** Сюда нельзя попасть, но сюда можно учесть */
+                        Log.w("MainActivity", "Unexpected removedCount: $it")
+                        getString(R.string.below_zero)
+                    }
+                }
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
             }
         }
     }
