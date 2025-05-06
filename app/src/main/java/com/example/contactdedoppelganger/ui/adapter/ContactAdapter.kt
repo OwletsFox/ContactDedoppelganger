@@ -9,7 +9,7 @@ import com.example.contactdedoppelganger.databinding.ItemContactBinding
 import com.example.contactdedoppelganger.domain.model.ContactDomain
 
 /**
- * Адаптер для rvContacts
+ * Адаптер для списка контактов по первому символу
  */
 class ContactAdapter : ListAdapter<ContactDomain, ContactAdapter.ContactViewHolder>(DiffCallback) {
 
@@ -40,9 +40,5 @@ class ContactAdapter : ListAdapter<ContactDomain, ContactAdapter.ContactViewHold
         override fun areContentsTheSame(oldItem: ContactDomain, newItem: ContactDomain): Boolean {
             return oldItem == newItem
         }
-    }
-
-    fun update(newItems: List<ContactDomain>) {
-        submitList(newItems)
     }
 }
