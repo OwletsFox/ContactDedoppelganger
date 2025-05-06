@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Themes -->
+    <color name="my_light_primary">#03A9F4</color>
+    <color name="my_dark_primary">#005A80</color>
+
+    <!-- for drawable -->
+    <color name="border_blue">#319BEB</color>
 </resources>

@@ -12,4 +12,5 @@
     <string name="deleted_duplicates">Удалено %1$d дубликатов</string>
     <string name="no_duplicates_found">Дубликаты не найдены</string>
     <string name="below_zero">Произошла неожиданная ошибка при удалении</string>
+    <string name="no_permission_alert">Без разрешения на доступ к контактам приложение не сможет работать</string>
 </resources>

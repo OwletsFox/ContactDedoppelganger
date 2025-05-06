@@ -9,10 +9,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contactdedoppelganger.R
 import com.example.contactdedoppelganger.databinding.ActivityMainBinding
 import com.example.contactdedoppelganger.ui.adapter.ContactAdapter
+import com.example.contactdedoppelganger.ui.adapter.HeaderAdapter
 import com.example.contactdedoppelganger.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,8 +47,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
+        /** список: заголовки + элементы */
+        viewModel.sections.observe(this) { sections ->
+            val adapters = sections.flatMap { section ->
+                listOf(
+                    HeaderAdapter(section.title),
+                    ContactAdapter().apply { submitList(section.items) }
+                )
+            }
+            binding.rvContacts.adapter = ConcatAdapter(adapters)
+        }
+
         viewModel.contacts.observe(this) { list ->
-            adapter.update(list)
             binding.btnDelDuplicates.isEnabled = list.isNotEmpty()
         }
         viewModel.isLoading.observe(this) { loading ->
@@ -104,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "Без разрешения на доступ к контактам приложение не сможет работать",
+                    getString(R.string.no_permission_alert),
                     Toast.LENGTH_LONG
                 ).show()
             }
