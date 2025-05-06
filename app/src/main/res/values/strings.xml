@@ -6,7 +6,8 @@
     <string name="item_contact_placeholder_phone">phone</string>
 
     <!-- UI names -->
-    <string name="btn_del_duplicates_text">Delete doppelgangers</string>
+    <string name="btn_del_duplicates_text">Удалить дубликаты</string>
+    <string name="head_activity_main">Телефонная книжка</string>
 
     <!-- MainActivity strings -->
     <string name="deleted_duplicates">Удалено %1$d дубликатов</string>
