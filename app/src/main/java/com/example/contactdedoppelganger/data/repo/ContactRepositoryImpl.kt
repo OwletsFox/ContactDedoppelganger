@@ -27,16 +27,19 @@ class ContactRepositoryImpl @Inject constructor(
 ) : ContactRepository {
 
     private var service: IContactService? = null
+    private var isBound = false
     private val latch = CountDownLatch(1)
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             Log.d("ContactRepo", "Service connected: $name")
             service = IContactService.Stub.asInterface(binder)
+            isBound = true
             latch.countDown()
         }
         override fun onServiceDisconnected(name: ComponentName) {
             service = null
+            isBound = false
         }
     }
 
@@ -47,14 +50,30 @@ class ContactRepositoryImpl @Inject constructor(
         latch.await(5, TimeUnit.SECONDS)
     }
 
-    override suspend fun getAllContacts(): List<ContactDomain> = withContext(ioDispatcher) {
+    /**
+     * Функция-Дженерик, для безопасного вызова методов и устранения дублирования кода.
+     */
+    private suspend fun <T> callService(
+        action: IContactService.() -> T?
+    ): T? = withContext(ioDispatcher) {
         try {
             ensureBound()
-            val contactDtoList = service?.getAllContacts() ?: emptyList()
-            contactDtoList.map { it.toDomain() }
+            service?.action()
         } finally {
-            /** Отписка в целях экономии */
-            context.unbindService(connection)
+            if (isBound) {
+                context.unbindService(connection)
+                isBound = false
+            }
         }
     }
+
+    override suspend fun getAllContacts(): List<ContactDomain> {
+        val contactDtoList = callService { getAllContacts() } ?: emptyList()
+        return contactDtoList.map { it.toDomain() }
+    }
+
+    override suspend fun removeDuplicateContacts(): Int {
+        return callService { removeDuplicateContacts() } ?: 0
+    }
+
 }
