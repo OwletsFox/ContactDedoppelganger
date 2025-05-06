@@ -24,4 +24,18 @@
 - RecyclerView + ConcatAdapter
 - Kotlin Coroutines
 - Dagger Hilt for DI
-- AIDL + ContentResolver для работы с контактами
+- AIDL + ContentResolver
+- Junit 4 + Mokito (Unit-тесты)
+
+## Unit-тесты
+Покрытие бизнес-логики Unit-тестами на JUnit4 + Mockito:
+- **domain/usecase**  
+  - `GetContactsUseCaseTest`  
+  - `RemoveDuplicateContactsUseCaseTest`  
+- **ui/viewmodel**  
+  - `MainViewModelTest`
+
+Применяемые техники тест-дизайна: Классы эквивалентности / Прогнозирование ошибок
+### Запуск тестов
+```bash
+./gradlew test
